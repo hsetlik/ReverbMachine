@@ -1,4 +1,4 @@
-#include "YourPluginName/Common.h"
+#include "ReverbMachine/Common.h"
 
 static double sampleHz = 44100.0;
 

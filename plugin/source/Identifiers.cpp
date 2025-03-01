@@ -1,4 +1,4 @@
-#include "YourPluginName/Identifiers.h"
+#include "ReverbMachine/Identifiers.h"
 
 apvts::ParameterLayout ID::getParameterLayout() {
   apvts::ParameterLayout layout;
