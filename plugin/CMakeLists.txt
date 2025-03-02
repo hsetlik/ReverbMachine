@@ -29,6 +29,13 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/Common.h
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
+
+
+        ${INCLUDE_DIR}/Audio/DelayLine.h
+        ${INCLUDE_DIR}/Audio/ReverbBase.h
+        ${INCLUDE_DIR}/Audio/Dattorro.h
+        source/DelayLine.cpp
+        source/Dattorro.cpp
 )
 
 # Sets the include directories of the plugin project.
