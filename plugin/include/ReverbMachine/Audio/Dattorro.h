@@ -7,7 +7,6 @@ private:
   // Delay lines & state------------------------------
   DelayLine preDelay;
   DelayLine inDiffusion[4];
-  float preFilter;
   uint16_t maxPreDelay;
   // the left and right 'tanks'
   DelayLine decayDiffusion1[2];
@@ -18,6 +17,7 @@ private:
   // for tracking our sample offset
   uint16_t t = 0;
   // Parameters------------------------------
+  float preDelayAmt;
   float preFilterAmt;
   float inputDiff1Amt;
   float inputDiff2Amt;

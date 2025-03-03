@@ -19,11 +19,34 @@ typedef std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>
     combo_attach_ptr;
 typedef juce::NormalisableRange<float> frange_t;
 
+frange_t rangeWithCenter(float start, float end, float center);
+
 #define DECLARE_ID(name) const juce::Identifier name(#name);
+
+// enum of all the reverb algorithms
+enum ReverbType { Dattorro };
+
+juce::StringArray getReverbNames();
 
 namespace ID {
 // top level ID for the apvts
 DECLARE_ID(ReverbMachine_state)
+// which reverb type to use
+DECLARE_ID(ReverbMode)
+
+// we can use the same wet/dry ID throughout
+DECLARE_ID(wetDry)
+
+// Dattorro params----------------------------------------
+DECLARE_ID(DTRO_preDelay)
+DECLARE_ID(DTRO_preFilter)
+DECLARE_ID(DTRO_inDiff1)
+DECLARE_ID(DTRO_inDiff2)
+DECLARE_ID(DTRO_decayDiff)
+DECLARE_ID(DTRO_damping)
+DECLARE_ID(DTRO_decay)
+
+//----------------------------------------
 
 apvts::ParameterLayout getParameterLayout();
 }  // namespace ID
