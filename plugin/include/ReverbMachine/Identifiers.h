@@ -19,6 +19,8 @@ typedef std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>
     combo_attach_ptr;
 typedef juce::NormalisableRange<float> frange_t;
 
+typedef juce::Rectangle<float> rect_f;
+
 frange_t rangeWithCenter(float start, float end, float center);
 
 #define DECLARE_ID(name) const juce::Identifier name(#name);

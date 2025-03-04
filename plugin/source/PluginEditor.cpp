@@ -1,31 +1,25 @@
 #include "ReverbMachine/PluginEditor.h"
 #include "ReverbMachine/PluginProcessor.h"
+#include "juce_core/juce_core.h"
 
 namespace audio_plugin {
 ReverbMachineProcessorEditor::ReverbMachineProcessorEditor(
     ReverbMachineAudioProcessor& p)
-    : AudioProcessorEditor(&p), processorRef(p) {
+    : AudioProcessorEditor(&p), processorRef(p), spv(p.tree) {
   juce::ignoreUnused(processorRef);
+  addAndMakeVisible(spv);
   // Make sure that before the constructor has finished, you've set the
   // editor's size to whatever you need it to be.
-  setSize(400, 300);
+  setSize(800, 600);
 }
 
 ReverbMachineProcessorEditor::~ReverbMachineProcessorEditor() {}
 
 void ReverbMachineProcessorEditor::paint(juce::Graphics& g) {
-  // (Our component is opaque, so we must completely fill the background with a
-  // solid colour)
-  g.fillAll(
-      getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-  g.setColour(juce::Colours::white);
-  g.setFont(15.0f);
-  g.drawFittedText("Hello World!", getLocalBounds(),
-                   juce::Justification::centred, 1);
+  juce::ignoreUnused(g);
 }
 
 void ReverbMachineProcessorEditor::resized() {
-  // This is generally where you'll want to lay out the positions of any
-  // subcomponents in your editor..
+  spv.setBounds(getLocalBounds());
 }
 }  // namespace audio_plugin

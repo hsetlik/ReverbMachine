@@ -5,7 +5,7 @@
 #include "Identifiers.h"
 #include "juce_audio_processors/juce_audio_processors.h"
 constexpr float twoPi_f = juce::MathConstants<float>::twoPi;
-//
+
 // maybe we'll avoid writing 5 zillion 'prepare()' functions this way
 namespace SampleRate {
 void set(double rate);

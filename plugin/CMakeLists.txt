@@ -37,7 +37,13 @@ target_sources(${PROJECT_NAME}
         source/Dattorro.cpp
 
         ${INCLUDE_DIR}/GUI/ParamSlider.h
+        ${INCLUDE_DIR}/GUI/SwitchingParentView.h
+        ${INCLUDE_DIR}/GUI/DattorroView.h
+        ${INCLUDE_DIR}/GUI/LayoutHelpers.h
         source/ParamSlider.cpp
+        source/SwitchingParentView.cpp
+        source/DattorroView.cpp
+        source/LayoutHelpers.cpp
 )
 
 # Sets the include directories of the plugin project.
