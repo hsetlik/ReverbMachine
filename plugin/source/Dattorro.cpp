@@ -1,4 +1,5 @@
 #include "ReverbMachine/Audio/Dattorro.h"
+#include "ReverbMachine/Identifiers.h"
 #include "juce_core/juce_core.h"
 
 // filter helpers
@@ -68,7 +69,32 @@ void Dattorro::init(double sampleRate) {
 }
 
 void Dattorro::updateParams(apvts& tree) {
-  juce::ignoreUnused(tree);
+  // grab values in thread-safe way
+  const float _preDelay =
+      tree.getRawParameterValue(ID::DTRO_preDelay.toString())->load();
+  const float _preFilter =
+      tree.getRawParameterValue(ID::DTRO_preFilter.toString())->load();
+  const float _inDiff1 =
+      tree.getRawParameterValue(ID::DTRO_inDiff1.toString())->load();
+  const float _inDiff2 =
+      tree.getRawParameterValue(ID::DTRO_inDiff2.toString())->load();
+  const float _dDiff =
+      tree.getRawParameterValue(ID::DTRO_decayDiff.toString())->load();
+  const float _damping =
+      tree.getRawParameterValue(ID::DTRO_damping.toString())->load();
+  const float _decay =
+      tree.getRawParameterValue(ID::DTRO_decay.toString())->load();
+
+  preFilterAmt = _preFilter;
+  preDelayAmt = _preDelay;
+  uint16_t _pdSamples = (uint16_t)(preDelayAmt * (float)maxPreDelay);
+  preDelay.setDelay(0, _pdSamples);
+  inputDiff1Amt = _inDiff1;
+  inputDiff2Amt = _inDiff2;
+  decayDiff1Amt = _dDiff;
+  decayDiff2Amt = std::clamp(_decay + 0.15f, 0.25f, 0.5f);
+  dampingAmt = _damping;
+  decayAmt = _decay;
 }
 
 void Dattorro::processChunk(float* lBuf,
@@ -76,22 +102,22 @@ void Dattorro::processChunk(float* lBuf,
                             int numSamples,
                             bool iStereo,
                             bool oStereo) {
-  if (!oStereo) {  // mono mode
+  if (!oStereo) {
     for (int i = 0; i < numSamples; ++i) {
       processInput(lBuf[i]);
       lBuf[i] = (getLeft() + getRight()) / 2.0f;
     }
-  } else if (!iStereo) {  // mono in stereo out
+  } else if (!iStereo) {  // mono in / Stereo out
     for (int i = 0; i < numSamples; ++i) {
       processInput(lBuf[i]);
       lBuf[i] = getLeft();
       rBuf[i] = getRight();
     }
-  } else {  // stereo in stereo out
-    float input;
+  } else {  // stereo / stereo
+    float mix;
     for (int i = 0; i < numSamples; ++i) {
-      input = (lBuf[i] + rBuf[i]) / 2.0f;
-      processInput(input);
+      mix = (lBuf[i] + rBuf[i]) / 2.0f;
+      processInput(mix);
       lBuf[i] = getLeft();
       rBuf[i] = getRight();
     }

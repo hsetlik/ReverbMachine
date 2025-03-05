@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Common.h"
+#include "ReverbMachine/Audio/ReverbCore.h"
 
 namespace audio_plugin {
 
@@ -35,6 +36,7 @@ public:
   apvts tree;
 
 private:
+  ReverbCore verb;
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReverbMachineAudioProcessor)
 };
 

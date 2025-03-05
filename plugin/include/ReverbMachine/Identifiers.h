@@ -26,7 +26,7 @@ frange_t rangeWithCenter(float start, float end, float center);
 #define DECLARE_ID(name) const juce::Identifier name(#name);
 
 // enum of all the reverb algorithms
-enum ReverbType { Dattorro };
+enum ReverbType { Dattorro_t };
 
 juce::StringArray getReverbNames();
 

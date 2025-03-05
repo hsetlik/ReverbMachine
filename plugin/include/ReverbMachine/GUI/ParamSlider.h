@@ -2,6 +2,8 @@
 #include "ReverbMachine/Identifiers.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 
+#define LABEL_HEIGHT_PX 12.0f
+
 /* Slider subclass that manages its own
  * attachment to an apvts parameter
  * */

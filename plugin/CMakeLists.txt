@@ -33,6 +33,7 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/Audio/DelayLine.h
         ${INCLUDE_DIR}/Audio/ReverbBase.h
         ${INCLUDE_DIR}/Audio/Dattorro.h
+        ${INCLUDE_DIR}/Audio/ReverbCore.h
         source/DelayLine.cpp
         source/Dattorro.cpp
 
@@ -44,6 +45,7 @@ target_sources(${PROJECT_NAME}
         source/SwitchingParentView.cpp
         source/DattorroView.cpp
         source/LayoutHelpers.cpp
+        source/ReverbCore.cpp
 )
 
 # Sets the include directories of the plugin project.
