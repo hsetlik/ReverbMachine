@@ -27,8 +27,10 @@ void SwitchingParentView::comboBoxChanged(juce::ComboBox* cb) {
     views[(size_t)activeViewIdx]->setVisible(false);
     activeViewIdx = newIdx;
     views[(size_t)activeViewIdx]->setVisible(true);
-    views[(size_t)activeViewIdx]->setVisible(true);
+    views[(size_t)activeViewIdx]->setEnabled(true);
+    views[(size_t)activeViewIdx]->toFront(false);
   }
+  resized();
 }
 
 void SwitchingParentView::resized() {
