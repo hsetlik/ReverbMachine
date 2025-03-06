@@ -11,6 +11,7 @@ frange_t rangeWithCenter(float start, float end, float center) {
 juce::StringArray getReverbNames() {
   juce::StringArray arr;
   arr.add("Dattorro");
+  arr.add("Dattorro IIR");
   return arr;
 }
 
@@ -57,5 +58,23 @@ apvts::ParameterLayout ID::getParameterLayout() {
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRO_damping.toString(), "Damping", dampingRange, dampingDefault));
 
+  // DattorroIIR---------------------------------------------
+
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_preDelay.toString(), "Pre-delay", preDelayRange,
+      preDelayDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_preFilter.toString(), "Pre-filter", preFilterRange,
+      preFilterDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_inDiff1.toString(), "In diff. 1", iDiff1Range, iDiff1Default));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_inDiff2.toString(), "In diff. 2", iDiff2Range, iDiff2Default));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_decayDiff.toString(), "Decay diff.", dDiffRange, dDiffDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_decay.toString(), "Decay", decayRange, decayDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::DTRI_damping.toString(), "Damping", dampingRange, dampingDefault));
   return layout;
 }
