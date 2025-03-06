@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Dattorro.h"
+#include "DattorroIIR.h"
 
 class ReverbCore {
 private:

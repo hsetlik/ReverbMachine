@@ -44,6 +44,13 @@ struct single_iir_params_t {
     gain = other.gain;
     return *this;
   }
+  single_iir_params_t() = default;
+  single_iir_params_t(const single_iir_params_t& other) {
+    filterType = other.filterType;
+    cutoff = other.cutoff;
+    q = other.q;
+    gain = other.gain;
+  }
 };
 
 // wrapper around juce's IIR biquad implementation
@@ -63,7 +70,7 @@ public:
   float process(float input);
 };
 
-// enum for the different IIF filter topologies
+// enum for the different IIR filter topologies
 // provided in the dsp::FilterDesign juce module
 // https://docs.juce.com/master/structdsp_1_1FilterDesign.html
 

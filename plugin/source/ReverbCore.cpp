@@ -11,6 +11,9 @@ void ReverbCore::prepareReverbCore(int type) {
     case ReverbType::Dattorro_t:
       core.reset(new Dattorro());
       break;
+    case ReverbType::DattorroIIR_t:
+      core.reset(new DattorroIIR());
+      break;
     default:
       core.reset(new Dattorro());
       break;
