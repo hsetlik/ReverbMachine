@@ -1,5 +1,6 @@
 #pragma once
 #include "DattorroView.h"
+#include "DattorroIIRView.h"
 #include "LayoutHelpers.h"
 #include "ReverbMachine/GUI/ParamSlider.h"
 #include "juce_gui_basics/juce_gui_basics.h"
@@ -9,7 +10,8 @@ private:
   ParamComboBox typeBox;
   ParamSlider wetDrySlider;
   DattorroView dattorro;
-  std::vector<juce::Component*> views = {&dattorro};
+  DattorroIIRView dattorroIIR;
+  std::vector<juce::Component*> views = {&dattorro, &dattorroIIR};
   int activeViewIdx = 0;
 
 public:

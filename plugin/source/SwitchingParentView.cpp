@@ -4,8 +4,12 @@
 SwitchingParentView::SwitchingParentView(apvts& tree)
     : typeBox(tree, ID::ReverbMode.toString()),
       wetDrySlider(tree, ID::wetDry.toString()),
-      dattorro(tree) {
+      dattorro(tree),
+      dattorroIIR(tree) {
   addAndMakeVisible(&dattorro);
+  addAndMakeVisible(&dattorroIIR);
+  dattorroIIR.setVisible(false);
+  dattorroIIR.setEnabled(false);
   typeBox.addItemList(getReverbNames(), 1);
   typeBox.addListener(this);
   typeBox.setSelectedItemIndex(0);
