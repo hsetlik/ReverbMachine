@@ -5,6 +5,7 @@ SwitchingParentView::SwitchingParentView(apvts& tree)
     : typeBox(tree, ID::ReverbMode.toString()),
       wetDrySlider(tree, ID::wetDry.toString()),
       dattorro(tree) {
+  addAndMakeVisible(&dattorro);
   typeBox.addItemList(getReverbNames(), 1);
   typeBox.addListener(this);
   typeBox.setSelectedItemIndex(0);
@@ -12,7 +13,6 @@ SwitchingParentView::SwitchingParentView(apvts& tree)
   addAndMakeVisible(&wetDrySlider);
   wetDrySlider.setSliderStyle(juce::Slider::LinearVertical);
   wetDrySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 45, 15);
-  addAndMakeVisible(&dattorro);
 }
 
 void SwitchingParentView::comboBoxChanged(juce::ComboBox* cb) {

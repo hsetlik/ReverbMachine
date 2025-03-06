@@ -84,6 +84,8 @@ void Dattorro::updateParams(apvts& tree) {
       tree.getRawParameterValue(ID::DTRO_damping.toString())->load();
   const float _decay =
       tree.getRawParameterValue(ID::DTRO_decay.toString())->load();
+  const float _wetDry =
+      tree.getRawParameterValue(ID::wetDry.toString())->load();
 
   preFilterAmt = _preFilter;
   preDelayAmt = _preDelay;
@@ -95,6 +97,7 @@ void Dattorro::updateParams(apvts& tree) {
   decayDiff2Amt = std::clamp(_decay + 0.15f, 0.25f, 0.5f);
   dampingAmt = _damping;
   decayAmt = _decay;
+  wetDry = _wetDry;
 }
 
 void Dattorro::processChunk(float* lBuf,
@@ -183,7 +186,8 @@ float Dattorro::getLeft() {
   a -= preDampingDelay[0].read(3, t);
   a -= decayDiffusion2[0].read(1, t);
   a += postDampingDelay[0].read(1, t);
-  return a;
+  const float dryVal = preDelay.read(0, t);
+  return flerp(dryVal, a, wetDry);
 }
 
 float Dattorro::getRight() {
@@ -194,5 +198,7 @@ float Dattorro::getRight() {
   a -= preDampingDelay[1].read(3, t);
   a -= decayDiffusion2[1].read(1, t);
   a += postDampingDelay[1].read(1, t);
-  return a;
+
+  const float dryVal = preDelay.read(0, t);
+  return flerp(dryVal, a, wetDry);
 }
