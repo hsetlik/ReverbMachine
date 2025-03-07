@@ -26,7 +26,7 @@ frange_t rangeWithCenter(float start, float end, float center);
 #define DECLARE_ID(name) const juce::Identifier name(#name);
 
 // enum of all the reverb algorithms
-enum ReverbType { Dattorro_t, DattorroIIR_t };
+enum ReverbType { Dattorro_t, DattorroIIR_t, SpaceMod_t };
 
 juce::StringArray getReverbNames();
 
@@ -56,6 +56,15 @@ DECLARE_ID(DTRI_lowPass)
 DECLARE_ID(DTRI_width)
 DECLARE_ID(DTRI_damping)
 DECLARE_ID(DTRI_decay)
+
+// Space mod params---------------------------------------
+DECLARE_ID(SPMD_inFilter)
+DECLARE_ID(SPMD_lfoHz)
+DECLARE_ID(SPMD_lfoTexture)
+DECLARE_ID(SPMD_width)
+DECLARE_ID(SPMD_tankFilter1)
+DECLARE_ID(SPMD_tankFilter2)
+DECLARE_ID(SPMD_decay)
 
 //----------------------------------------
 

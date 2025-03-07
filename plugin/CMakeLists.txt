@@ -31,12 +31,15 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/PluginProcessor.h
 
         ${INCLUDE_DIR}/Audio/ValueSmoother.h
+
+        ${INCLUDE_DIR}/Audio/SineLFO.h
         ${INCLUDE_DIR}/Audio/IIR.h
         ${INCLUDE_DIR}/Audio/DelayLine.h
         ${INCLUDE_DIR}/Audio/ReverbBase.h
         ${INCLUDE_DIR}/Audio/Dattorro.h
         ${INCLUDE_DIR}/Audio/DattorroIIR.h
         ${INCLUDE_DIR}/Audio/ReverbCore.h
+        source/SineLFO.cpp
         source/IIR.cpp
         source/DelayLine.cpp
         source/Dattorro.cpp

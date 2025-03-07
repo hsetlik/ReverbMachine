@@ -34,7 +34,6 @@ void SingleIIR::setFrequency(float freq) {
 }
 
 float SingleIIR::process(float input) {
-  static const float minFreqDiff = 5.0f;
   if (smoothingActive) {
     smoothedFreq = smoother.smooth(targetFreq);
   }

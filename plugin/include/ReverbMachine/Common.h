@@ -10,6 +10,7 @@ constexpr float twoPi_f = juce::MathConstants<float>::twoPi;
 namespace SampleRate {
 void set(double rate);
 double get();
+float getf();
 }  // namespace SampleRate
 
 inline float flerp(float a, float b, float t) {

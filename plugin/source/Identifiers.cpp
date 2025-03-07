@@ -12,6 +12,7 @@ juce::StringArray getReverbNames() {
   juce::StringArray arr;
   arr.add("Dattorro");
   arr.add("Dattorro IIR");
+  arr.add("Space Mod");
   return arr;
 }
 
@@ -83,5 +84,31 @@ apvts::ParameterLayout ID::getParameterLayout() {
       ID::DTRI_decay.toString(), "Decay", decayRange, decayDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_damping.toString(), "Damping", dampingRange, dampingDefault));
+
+  // Space Mod-------------------------------------------
+  const frange_t inFilterRange = rangeWithCenter(0.0f, 1.0f, 0.25f);
+  const float inFilterDefault = 0.25f;
+  const frange_t lfoHzRange = rangeWithCenter(0.0012f, 16.0f, 0.85f);
+  const float lfoHzDefault = 0.85f;
+  const frange_t lfoTextureRange = rangeWithCenter(0.0f, 1.0f, 0.35f);
+  const float lfoTextureDefault = 0.35f;
+
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_inFilter.toString(), "In filter", inFilterRange,
+      inFilterDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_lfoHz.toString(), "LFO Speed", lfoHzRange, lfoHzDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_lfoTexture.toString(), "LFO Texture", lfoTextureRange,
+      lfoTextureDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_width.toString(), "Width", widthRange, widthDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_decay.toString(), "Decay", decayRange, decayDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_tankFilter1.toString(), "Filter 1", widthRange, widthDefault));
+  layout.add(std::make_unique<juce::AudioParameterFloat>(
+      ID::SPMD_tankFilter2.toString(), "Filter 2", widthRange, widthDefault));
+
   return layout;
 }
