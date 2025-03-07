@@ -30,6 +30,7 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/PluginEditor.h
         ${INCLUDE_DIR}/PluginProcessor.h
 
+        ${INCLUDE_DIR}/Audio/ValueSmoother.h
         ${INCLUDE_DIR}/Audio/IIR.h
         ${INCLUDE_DIR}/Audio/DelayLine.h
         ${INCLUDE_DIR}/Audio/ReverbBase.h

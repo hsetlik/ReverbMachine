@@ -2,6 +2,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_dsp/juce_dsp.h>
 #include <memory.h>
+#include "ValueSmoother.h"
 
 // type aliases for brevity
 typedef juce::dsp::IIR::Filter<float> iir_core_t;
@@ -51,16 +52,32 @@ struct single_iir_params_t {
     q = other.q;
     gain = other.gain;
   }
+  bool operator==(single_iir_params_t& other) {
+    bool tComp = filterType == other.filterType;
+    bool fComp = fequal(cutoff, other.cutoff);
+    bool qComp = fequal(q, other.q);
+    bool gComp = fequal(gain, other.gain);
+    return tComp && fComp && qComp && gComp;
+  }
 };
 
 // wrapper around juce's IIR biquad implementation
 class SingleIIR {
 private:
+  bool useFreqSmoothing = false;
+  // value smoothing stuff
+  bool smoothingActive = false;
+  ValueSmoother smoother;
+  float targetFreq = 2000.0f;
+  float smoothedFreq = 2000.0f;
+
+  //--------------------
   std::unique_ptr<iir_core_t> core;
   single_iir_params_t params;
   double sampleRate;
   bool filterPrepared = false;
   // helper for re-setting up the unique_ptr
+  single_iir_params_t lastPrepareParams;
   void prepareFilter();
 
 public:
@@ -70,6 +87,7 @@ public:
   void setFrequency(float freq);
   void prepare(double sampleFreq);
   float process(float input);
+  void setFreqSmoothing(bool useSmoothing) { useFreqSmoothing = useSmoothing; }
 };
 
 // enum for the different IIR filter topologies

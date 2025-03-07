@@ -71,6 +71,7 @@ void DattorroIIR::init(double sampleRate) {
   decayDiff1Amt = 0.70f;
   dampingAmt = 0.95f;
   wetDry = 0.85f;
+  preFilterIIR.setFreqSmoothing(true);
   preFilterIIR.prepare(sampleRate);
   setPreFilter(preFilterAmt);
   // set up the two filters for each tank
@@ -79,12 +80,14 @@ void DattorroIIR::init(double sampleRate) {
     auto hpPar = *hiPass[i].getParams();
     hpPar.filterType = iir_type_t::NormalHighPass;
     hpPar.cutoff = hiPassHz;
+    hiPass[i].setFreqSmoothing(true);
     hiPass[i].setParams(hpPar);
     hiPass[i].prepare(sampleRate);
     // set up low pass
     auto lpPar = *loPass[i].getParams();
     lpPar.cutoff = loPassHz;
     lpPar.filterType = iir_type_t::NormalLowPass;
+    loPass[i].setFreqSmoothing(true);
     loPass[i].setParams(lpPar);
     loPass[i].prepare(sampleRate);
   }
