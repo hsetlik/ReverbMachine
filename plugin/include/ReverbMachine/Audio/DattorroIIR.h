@@ -16,13 +16,16 @@ private:
   DelayLine preDampingDelay[2];
   DelayLine postDampingDelay[2];
   float damping[2];
+  // the high pass/low pass filters for each tank
+  SingleIIR hiPass[2];
+  SingleIIR loPass[2];
   // for tracking our sample offset
   uint16_t t = 0;
   // Parameters------------------------------
   float preDelayAmt;
   float preFilterAmt;
-  float lowPassAmt;
-  float hiPassAmt;
+  float loPassHz;
+  float hiPassHz;
   float stereoWidth;
   float inputDiff1Amt;
   float inputDiff2Amt;
@@ -50,5 +53,6 @@ private:
 
   // filtering helpers
   void setPreFilter(float amt);
+  void setupTankFilters(float lpHz, float hpHz, float width);
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DattorroIIR)
 };

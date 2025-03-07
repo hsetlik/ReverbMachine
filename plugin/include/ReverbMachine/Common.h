@@ -15,3 +15,7 @@ double get();
 inline float flerp(float a, float b, float t) {
   return a + ((b - a) * t);
 }
+
+inline bool fequal(float a, float b, float epsilon = 0.001f) {
+  return std::fabs(a - b) < epsilon;
+}

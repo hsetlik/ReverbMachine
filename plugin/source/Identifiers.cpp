@@ -64,6 +64,8 @@ apvts::ParameterLayout ID::getParameterLayout() {
   const float hpDefault = 70.0f;
   const frange_t lpRange = rangeWithCenter(700.0f, 6500.0f, 1200.0f);
   const float lpDefault = 1400.0f;
+  const frange_t widthRange(0.0f, 1.0f);
+  const float widthDefault = 0.5f;
 
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_preDelay.toString(), "Pre-delay", preDelayRange,
@@ -76,7 +78,7 @@ apvts::ParameterLayout ID::getParameterLayout() {
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_lowPass.toString(), "Low Pass", lpRange, lpDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
-      ID::DTRI_width.toString(), "Width", dDiffRange, dDiffDefault));
+      ID::DTRI_width.toString(), "Width", widthRange, widthDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_decay.toString(), "Decay", decayRange, decayDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(

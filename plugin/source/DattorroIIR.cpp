@@ -1,5 +1,7 @@
 #include "ReverbMachine/Audio/DattorroIIR.h"
+#include "ReverbMachine/Audio/IIR.h"
 #include "ReverbMachine/Identifiers.h"
+#include "juce_audio_basics/juce_audio_basics.h"
 #include "juce_core/juce_core.h"
 
 // filter helpers
@@ -62,12 +64,30 @@ void DattorroIIR::init(double sampleRate) {
   preFilterAmt = 0.85f;
   inputDiff1Amt = 0.75f;
   inputDiff2Amt = 0.625f;
+  hiPassHz = 70.0f;
+  loPassHz = 1400.0f;
+
   decayAmt = 0.75f;
   decayDiff1Amt = 0.70f;
   dampingAmt = 0.95f;
   wetDry = 0.85f;
   preFilterIIR.prepare(sampleRate);
   setPreFilter(preFilterAmt);
+  // set up the two filters for each tank
+  for (int i = 0; i < 2; i++) {
+    // set up high pass
+    auto hpPar = *hiPass[i].getParams();
+    hpPar.filterType = iir_type_t::NormalHighPass;
+    hpPar.cutoff = hiPassHz;
+    hiPass[i].setParams(hpPar);
+    hiPass[i].prepare(sampleRate);
+    // set up low pass
+    auto lpPar = *loPass[i].getParams();
+    lpPar.cutoff = loPassHz;
+    lpPar.filterType = iir_type_t::NormalLowPass;
+    loPass[i].setParams(lpPar);
+    loPass[i].prepare(sampleRate);
+  }
 }
 
 void DattorroIIR::updateParams(apvts& tree) {
@@ -83,9 +103,9 @@ void DattorroIIR::updateParams(apvts& tree) {
   const float _width =
       tree.getRawParameterValue(ID::DTRI_width.toString())->load();
   const float _damping =
-      tree.getRawParameterValue(ID::DTRO_damping.toString())->load();
+      tree.getRawParameterValue(ID::DTRI_damping.toString())->load();
   const float _decay =
-      tree.getRawParameterValue(ID::DTRO_decay.toString())->load();
+      tree.getRawParameterValue(ID::DTRI_decay.toString())->load();
   const float _wetDry =
       tree.getRawParameterValue(ID::wetDry.toString())->load();
 
@@ -93,9 +113,6 @@ void DattorroIIR::updateParams(apvts& tree) {
   preDelayAmt = _preDelay;
   uint16_t _pdSamples = (uint16_t)(preDelayAmt * (float)maxPreDelay);
   preDelay.setDelay(0, _pdSamples);
-  lowPassAmt = _lp;
-  hiPassAmt = _hp;
-  stereoWidth = _width;
   decayDiff2Amt = std::clamp(_decay + 0.15f, 0.25f, 0.5f);
   dampingAmt = _damping;
   decayAmt = _decay;
@@ -103,12 +120,38 @@ void DattorroIIR::updateParams(apvts& tree) {
 
   // set up the pre-filter lowpass
   setPreFilter(preFilterAmt);
+  setupTankFilters(_lp, _hp, _width);
 }
 
 void DattorroIIR::setPreFilter(float amt) {
   static frange_t pfRange = rangeWithCenter(500.0f, 3500.0f, 1500.0f);
   float hz = pfRange.convertFrom0to1(1.0f - amt);
   preFilterIIR.setFrequency(hz);
+}
+
+void DattorroIIR::setupTankFilters(float lpHz, float hpHz, float width) {
+  static const float hpGainMin = juce::Decibels::decibelsToGain(-5.3f);
+  static const float hpGainMax = juce::Decibels::decibelsToGain(3.4f);
+  static const float lpGainMin = juce::Decibels::decibelsToGain(-5.3f);
+  static const float lpGainMax = juce::Decibels::decibelsToGain(3.4f);
+
+  static float maxHpCoeffs[2] = {hpGainMin, hpGainMax};
+  static float maxLpCoeffs[2] = {lpGainMin, lpGainMax};
+  // if any of these three change we have to recalculate all of them
+  if (!fequal(lpHz, loPassHz) || !fequal(hpHz, hiPassHz) ||
+      !fequal(width, stereoWidth)) {
+    loPassHz = lpHz;
+    hiPassHz = hpHz;
+    stereoWidth = width;
+    // now set the actual cutoff for each filter based on the
+    // stereo width
+    for (int i = 0; i < 2; ++i) {
+      float lFreq = loPassHz * flerp(1.0f, maxLpCoeffs[i], stereoWidth);
+      float hFreq = hiPassHz * flerp(1.0f, maxHpCoeffs[i], stereoWidth);
+      loPass[i].setFrequency(lFreq);
+      hiPass[i].setFrequency(hFreq);
+    }
+  }
 }
 
 void DattorroIIR::processChunk(float* lBuf,
@@ -177,7 +220,7 @@ void DattorroIIR::processInput(float input) {
     // back to this half ot the tank
     x1 = decayDiffusion1[i].processDiffuser(t, x1, decayDiff1Amt);
     x1 = preDampingDelay[i].process(t, x1);
-    x1 = LP_process(&damping[i], x1, dampingAmt);
+    x1 = loPass[i].process(x1);
     x1 *= decayAmt;
     x1 = decayDiffusion2[i].processDiffuser(t, x1, decayDiff2Amt);
     postDampingDelay[i].write(t, x1);
