@@ -15,8 +15,6 @@ SwitchingParentView::SwitchingParentView(apvts& tree)
   typeBox.setSelectedItemIndex(0);
   addAndMakeVisible(&typeBox);
   addAndMakeVisible(&wetDrySlider);
-  wetDrySlider.setSliderStyle(juce::Slider::LinearVertical);
-  wetDrySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 45, 15);
 }
 
 void SwitchingParentView::comboBoxChanged(juce::ComboBox* cb) {
@@ -40,7 +38,7 @@ void SwitchingParentView::resized() {
   views[(size_t)activeViewIdx]->setBounds(fBounds.toNearestInt());
   const float dX = fBounds.getWidth() / 4.0f;
   const float dY = fBounds.getHeight() / 2.0f;
-  rect_f wetDryBox = {3.0f * dX, dY + 12.0f, dX, dY - 12.0f};
+  rect_f wetDryBox = {3.0f * dX, topBounds.getHeight() + dY, dX, dY};
   wetDrySlider.setBounds(wetDryBox.toNearestInt());
   wetDrySlider.setEnabled(true);
   wetDrySlider.toFront(false);

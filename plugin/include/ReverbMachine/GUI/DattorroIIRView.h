@@ -6,15 +6,15 @@
 
 class DattorroIIRView : public juce::Component {
 private:
-  ParamSlider preDelaySlider;
-  ParamSlider preFilterSlider;
-  ParamSlider id1Slider;
-  ParamSlider id2Slider;
-  ParamSlider decayDiffSlider;
-  ParamSlider dampingSlider;
-  ParamSlider decaySlider;
+  LabeledParamSlider preDelaySlider;
+  LabeledParamSlider preFilterSlider;
+  LabeledParamSlider id1Slider;
+  LabeledParamSlider id2Slider;
+  LabeledParamSlider decayDiffSlider;
+  LabeledParamSlider dampingSlider;
+  LabeledParamSlider decaySlider;
 
-  ParamSlider* sliders[7] = {
+  LabeledParamSlider* sliders[7] = {
       &preDelaySlider,  &preFilterSlider, &id1Slider,   &id2Slider,
       &decayDiffSlider, &dampingSlider,   &decaySlider,
   };

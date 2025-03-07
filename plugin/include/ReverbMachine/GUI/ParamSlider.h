@@ -17,6 +17,17 @@ public:
   void atttachToState(apvts& state, const juce::String& paramID);
 };
 
+class LabeledParamSlider : public juce::Component {
+private:
+  ParamSlider slider;
+  juce::Label label;
+
+public:
+  LabeledParamSlider(apvts& state, const juce::String& paramID);
+  ParamSlider* getSlider() { return &slider; }
+  void resized() override;
+};
+
 // same idea with a comboBox
 class ParamComboBox : public juce::ComboBox {
 private:

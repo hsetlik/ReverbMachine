@@ -8,7 +8,7 @@
 class SwitchingParentView : public juce::Component, juce::ComboBox::Listener {
 private:
   ParamComboBox typeBox;
-  ParamSlider wetDrySlider;
+  LabeledParamSlider wetDrySlider;
   DattorroView dattorro;
   DattorroIIRView dattorroIIR;
   std::vector<juce::Component*> views = {&dattorro, &dattorroIIR};
