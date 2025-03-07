@@ -14,6 +14,15 @@ void SingleIIR::prepare(double sr) {
   filterPrepared = true;
 }
 
+void SingleIIR::setFrequency(float freq) {
+  constexpr float diffThresh = 0.001f;
+  if (std::fabs(params.cutoff - freq) > diffThresh) {
+    params.cutoff = freq;
+    if (filterPrepared)
+      prepareFilter();
+  }
+}
+
 float SingleIIR::process(float input) {
   return core->processSample(input);
 }

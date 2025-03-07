@@ -1,17 +1,15 @@
 #pragma once
 #include "DelayLine.h"
 #include "ReverbBase.h"
-#include "IIR.h"
+#include "ReverbMachine/Audio/IIR.h"
 
 class DattorroIIR : public ReverbBase {
 private:
   // Delay lines & state------------------------------
   DelayLine preDelay;
-  // try replacing the delay line diffusers with IIR allpass filters
-  DelayLine inDiffusion_dl[4];
-  single_iir_params_t inDiffParams[4];
-  SingleIIR inDiffusion[4];
+  DelayLine inDiffusion[4];
   uint16_t maxPreDelay;
+  SingleIIR preFilterIIR;
   // the left and right 'tanks'
   DelayLine decayDiffusion1[2];
   DelayLine decayDiffusion2[2];
@@ -23,6 +21,9 @@ private:
   // Parameters------------------------------
   float preDelayAmt;
   float preFilterAmt;
+  float lowPassAmt;
+  float hiPassAmt;
+  float stereoWidth;
   float inputDiff1Amt;
   float inputDiff2Amt;
   float decayDiff1Amt;
@@ -46,5 +47,8 @@ private:
   void processInput(float input);
   float getLeft();
   float getRight();
+
+  // filtering helpers
+  void setPreFilter(float amt);
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DattorroIIR)
 };

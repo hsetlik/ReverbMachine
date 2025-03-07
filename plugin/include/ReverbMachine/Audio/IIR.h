@@ -66,6 +66,8 @@ private:
 public:
   SingleIIR();
   void setParams(single_iir_params_t other);
+  single_iir_params_t* getParams() { return &params; }
+  void setFrequency(float freq);
   void prepare(double sampleFreq);
   float process(float input);
 };

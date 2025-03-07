@@ -5,9 +5,9 @@
 DattorroIIRView::DattorroIIRView(apvts& tree)
     : preDelaySlider(tree, ID::DTRI_preDelay.toString()),
       preFilterSlider(tree, ID::DTRI_preFilter.toString()),
-      id1Slider(tree, ID::DTRI_inDiff1.toString()),
-      id2Slider(tree, ID::DTRI_inDiff2.toString()),
-      decayDiffSlider(tree, ID::DTRI_decayDiff.toString()),
+      id1Slider(tree, ID::DTRI_lowPass.toString()),
+      id2Slider(tree, ID::DTRI_lowPass.toString()),
+      decayDiffSlider(tree, ID::DTRI_width.toString()),
       dampingSlider(tree, ID::DTRI_damping.toString()),
       decaySlider(tree, ID::DTRI_decay.toString()) {
   for (int i = 0; i < 7; i++) {

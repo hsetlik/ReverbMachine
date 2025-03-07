@@ -60,6 +60,11 @@ apvts::ParameterLayout ID::getParameterLayout() {
 
   // DattorroIIR---------------------------------------------
 
+  const frange_t hpRange = rangeWithCenter(45.0f, 2000.0f, 85.0f);
+  const float hpDefault = 70.0f;
+  const frange_t lpRange = rangeWithCenter(700.0f, 6500.0f, 1200.0f);
+  const float lpDefault = 1400.0f;
+
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_preDelay.toString(), "Pre-delay", preDelayRange,
       preDelayDefault));
@@ -67,11 +72,11 @@ apvts::ParameterLayout ID::getParameterLayout() {
       ID::DTRI_preFilter.toString(), "Pre-filter", preFilterRange,
       preFilterDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
-      ID::DTRI_inDiff1.toString(), "In diff. 1", iDiff1Range, iDiff1Default));
+      ID::DTRI_highPass.toString(), "High Pass", hpRange, hpDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
-      ID::DTRI_inDiff2.toString(), "In diff. 2", iDiff2Range, iDiff2Default));
+      ID::DTRI_lowPass.toString(), "Low Pass", lpRange, lpDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
-      ID::DTRI_decayDiff.toString(), "Decay diff.", dDiffRange, dDiffDefault));
+      ID::DTRI_width.toString(), "Width", dDiffRange, dDiffDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::DTRI_decay.toString(), "Decay", decayRange, decayDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(

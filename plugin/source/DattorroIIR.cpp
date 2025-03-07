@@ -1,5 +1,4 @@
 #include "ReverbMachine/Audio/DattorroIIR.h"
-#include "ReverbMachine/Audio/IIR.h"
 #include "ReverbMachine/Identifiers.h"
 #include "juce_core/juce_core.h"
 
@@ -22,19 +21,10 @@ void DattorroIIR::init(double sampleRate) {
   // Initialize all the delay lines with Dattorro's 'magic numbers'
   preDelay.init(maxPreDelay);
   // input diffusion delays
-  inDiffusion_dl[0].init(142);
-  inDiffusion_dl[1].init(107);
-  inDiffusion_dl[2].init(379);
-  inDiffusion_dl[3].init(277);
-
-  // input diffusion allpass filters
-  static const float inDiffFreqs[4] = {102.0f, 383.0f, 720.0f, 1107.0f};
-  for (size_t i = 0; i < 4; ++i) {
-    inDiffParams[i].filterType = iir_type_t::NormalAllPass;
-    inDiffParams[i].cutoff = inDiffFreqs[i];
-    inDiffusion[i].setParams(inDiffParams[i]);
-    inDiffusion[i].prepare(sampleRate);
-  }
+  inDiffusion[0].init(142);
+  inDiffusion[1].init(107);
+  inDiffusion[2].init(379);
+  inDiffusion[3].init(277);
   // left tank----------------------------
   decayDiffusion1[0].init(672);
 
@@ -76,20 +66,22 @@ void DattorroIIR::init(double sampleRate) {
   decayDiff1Amt = 0.70f;
   dampingAmt = 0.95f;
   wetDry = 0.85f;
+  preFilterIIR.prepare(sampleRate);
+  setPreFilter(preFilterAmt);
 }
 
 void DattorroIIR::updateParams(apvts& tree) {
   // grab values in thread-safe way
   const float _preDelay =
-      tree.getRawParameterValue(ID::DTRO_preDelay.toString())->load();
+      tree.getRawParameterValue(ID::DTRI_preDelay.toString())->load();
   const float _preFilter =
-      tree.getRawParameterValue(ID::DTRO_preFilter.toString())->load();
-  const float _inDiff1 =
-      tree.getRawParameterValue(ID::DTRO_inDiff1.toString())->load();
-  const float _inDiff2 =
-      tree.getRawParameterValue(ID::DTRO_inDiff2.toString())->load();
-  const float _dDiff =
-      tree.getRawParameterValue(ID::DTRO_decayDiff.toString())->load();
+      tree.getRawParameterValue(ID::DTRI_preFilter.toString())->load();
+  const float _lp =
+      tree.getRawParameterValue(ID::DTRI_lowPass.toString())->load();
+  const float _hp =
+      tree.getRawParameterValue(ID::DTRI_highPass.toString())->load();
+  const float _width =
+      tree.getRawParameterValue(ID::DTRI_width.toString())->load();
   const float _damping =
       tree.getRawParameterValue(ID::DTRO_damping.toString())->load();
   const float _decay =
@@ -101,13 +93,22 @@ void DattorroIIR::updateParams(apvts& tree) {
   preDelayAmt = _preDelay;
   uint16_t _pdSamples = (uint16_t)(preDelayAmt * (float)maxPreDelay);
   preDelay.setDelay(0, _pdSamples);
-  inputDiff1Amt = _inDiff1;
-  inputDiff2Amt = _inDiff2;
-  decayDiff1Amt = _dDiff;
+  lowPassAmt = _lp;
+  hiPassAmt = _hp;
+  stereoWidth = _width;
   decayDiff2Amt = std::clamp(_decay + 0.15f, 0.25f, 0.5f);
   dampingAmt = _damping;
   decayAmt = _decay;
   wetDry = _wetDry;
+
+  // set up the pre-filter lowpass
+  setPreFilter(preFilterAmt);
+}
+
+void DattorroIIR::setPreFilter(float amt) {
+  static frange_t pfRange = rangeWithCenter(500.0f, 3500.0f, 1500.0f);
+  float hz = pfRange.convertFrom0to1(1.0f - amt);
+  preFilterIIR.setFrequency(hz);
 }
 
 void DattorroIIR::processChunk(float* lBuf,
@@ -161,15 +162,14 @@ void DattorroIIR::processInput(float input) {
   // pre-delay
   float x = preDelay.process(t, input);
   // pre-filter
-  static float _preFilter = 0.0f;
-  x = LP_process(&_preFilter, x, preFilterAmt);
-
+  x = preFilterIIR.process(x);
   // input diffusion
-  for (size_t i = 0; i < 4; ++i) {
-    x = inDiffusion[i].process(x);
-  }
-  // process the tanks
+  x = inDiffusion[0].processDiffuser(t, x, inputDiff1Amt);
+  x = inDiffusion[1].processDiffuser(t, x, inputDiff1Amt);
+  x = inDiffusion[2].processDiffuser(t, x, inputDiff2Amt);
+  x = inDiffusion[3].processDiffuser(t, x, inputDiff2Amt);
 
+  // process the tanks
   float x1;
   for (uint16_t i = 0; i < 2; i++) {
     // cross feedback

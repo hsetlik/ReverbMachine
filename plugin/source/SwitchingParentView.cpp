@@ -42,4 +42,6 @@ void SwitchingParentView::resized() {
   const float dY = fBounds.getHeight() / 2.0f;
   rect_f wetDryBox = {3.0f * dX, dY + 12.0f, dX, dY - 12.0f};
   wetDrySlider.setBounds(wetDryBox.toNearestInt());
+  wetDrySlider.setEnabled(true);
+  wetDrySlider.toFront(false);
 }

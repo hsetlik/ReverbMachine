@@ -51,9 +51,9 @@ DECLARE_ID(DTRO_decay)
 // Dattorro params----------------------------------------
 DECLARE_ID(DTRI_preDelay)
 DECLARE_ID(DTRI_preFilter)
-DECLARE_ID(DTRI_inDiff1)
-DECLARE_ID(DTRI_inDiff2)
-DECLARE_ID(DTRI_decayDiff)
+DECLARE_ID(DTRI_highPass)
+DECLARE_ID(DTRI_lowPass)
+DECLARE_ID(DTRI_width)
 DECLARE_ID(DTRI_damping)
 DECLARE_ID(DTRI_decay)
 
