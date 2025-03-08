@@ -102,7 +102,7 @@ apvts::ParameterLayout ID::getParameterLayout() {
       ID::SPMD_lfoTexture.toString(), "LFO Texture", lfoTextureRange,
       lfoTextureDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
-      ID::SPMD_width.toString(), "Width", widthRange, widthDefault));
+      ID::SPMD_inDiff.toString(), "In diff.", iDiff1Range, iDiff1Default));
   layout.add(std::make_unique<juce::AudioParameterFloat>(
       ID::SPMD_decay.toString(), "Decay", decayRange, decayDefault));
   layout.add(std::make_unique<juce::AudioParameterFloat>(

@@ -32,6 +32,7 @@ target_sources(${PROJECT_NAME}
 
         ${INCLUDE_DIR}/Audio/ValueSmoother.h
 
+        ${INCLUDE_DIR}/Audio/SpaceMod.h
         ${INCLUDE_DIR}/Audio/SineLFO.h
         ${INCLUDE_DIR}/Audio/IIR.h
         ${INCLUDE_DIR}/Audio/DelayLine.h
@@ -39,6 +40,7 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/Audio/Dattorro.h
         ${INCLUDE_DIR}/Audio/DattorroIIR.h
         ${INCLUDE_DIR}/Audio/ReverbCore.h
+        source/SpaceMod.cpp
         source/SineLFO.cpp
         source/IIR.cpp
         source/DelayLine.cpp
@@ -50,11 +52,13 @@ target_sources(${PROJECT_NAME}
         ${INCLUDE_DIR}/GUI/SwitchingParentView.h
         ${INCLUDE_DIR}/GUI/DattorroView.h
         ${INCLUDE_DIR}/GUI/DattorroIIRView.h
+        ${INCLUDE_DIR}/GUI/SpaceModView.h
         ${INCLUDE_DIR}/GUI/LayoutHelpers.h
         source/ParamSlider.cpp
         source/SwitchingParentView.cpp
         source/DattorroView.cpp
         source/DattorroIIRView.cpp
+        source/SpaceModView.cpp
         source/LayoutHelpers.cpp
 )
 

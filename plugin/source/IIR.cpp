@@ -18,15 +18,15 @@ void SingleIIR::prepare(double sr) {
 void SingleIIR::setFrequency(float freq) {
   if (useFreqSmoothing) {
     if (smoothingActive)
-      params.cutoff = smoothedFreq;
+      params.frequency = smoothedFreq;
     smoothingActive = !fequal(freq, smoothedFreq);
     targetFreq = freq;
     if (filterPrepared)
       prepareFilter();
   } else {
     constexpr float diffThresh = 0.001f;
-    if (std::fabs(params.cutoff - freq) > diffThresh) {
-      params.cutoff = freq;
+    if (std::fabs(params.frequency - freq) > diffThresh) {
+      params.frequency = freq;
       if (filterPrepared)
         prepareFilter();
     }
@@ -46,133 +46,134 @@ void SingleIIR::prepareFilter() {
     switch (type) {
       case FirstOrderLowPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeFirstOrderLowPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeFirstOrderLowPass(sampleRate, params.frequency)));
         break;
       case FirstOrderHighPass:
-        core.reset(new iir_core_t(
-            iir_coeffs_t::makeFirstOrderHighPass(sampleRate, params.cutoff)));
+        core.reset(new iir_core_t(iir_coeffs_t::makeFirstOrderHighPass(
+            sampleRate, params.frequency)));
         break;
       case FirstOrderAllPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeFirstOrderAllPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeFirstOrderAllPass(sampleRate, params.frequency)));
         break;
       case NormalLowPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeLowPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeLowPass(sampleRate, params.frequency)));
         break;
       case NormalHighPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeHighPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeHighPass(sampleRate, params.frequency)));
         break;
       case NormalBandPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeBandPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeBandPass(sampleRate, params.frequency)));
         break;
       case NormalAllPass:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeAllPass(sampleRate, params.cutoff)));
+            iir_coeffs_t::makeAllPass(sampleRate, params.frequency)));
         break;
       case NormalNotch:
-        core.reset(
-            new iir_core_t(iir_coeffs_t::makeNotch(sampleRate, params.cutoff)));
+        core.reset(new iir_core_t(
+            iir_coeffs_t::makeNotch(sampleRate, params.frequency)));
         break;
       case LowPassQ:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeLowPass(sampleRate, params.cutoff, params.q)));
+            iir_coeffs_t::makeLowPass(sampleRate, params.frequency, params.q)));
         break;
       case HighPassQ:
-        core.reset(new iir_core_t(
-            iir_coeffs_t::makeHighPass(sampleRate, params.cutoff, params.q)));
+        core.reset(new iir_core_t(iir_coeffs_t::makeHighPass(
+            sampleRate, params.frequency, params.q)));
         break;
       case BandPassQ:
-        core.reset(new iir_core_t(
-            iir_coeffs_t::makeBandPass(sampleRate, params.cutoff, params.q)));
+        core.reset(new iir_core_t(iir_coeffs_t::makeBandPass(
+            sampleRate, params.frequency, params.q)));
         break;
       case AllPassQ:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeAllPass(sampleRate, params.cutoff, params.q)));
+            iir_coeffs_t::makeAllPass(sampleRate, params.frequency, params.q)));
         break;
       case NotchQ:
         core.reset(new iir_core_t(
-            iir_coeffs_t::makeNotch(sampleRate, params.cutoff, params.q)));
+            iir_coeffs_t::makeNotch(sampleRate, params.frequency, params.q)));
         break;
       case LowShelf:
         core.reset(new iir_core_t(iir_coeffs_t::makeLowShelf(
-            sampleRate, params.cutoff, params.q, params.gain)));
+            sampleRate, params.frequency, params.q, params.gain)));
         break;
       case HighShelf:
         core.reset(new iir_core_t(iir_coeffs_t::makeHighShelf(
-            sampleRate, params.cutoff, params.q, params.gain)));
+            sampleRate, params.frequency, params.q, params.gain)));
         break;
       case Peak:
         core.reset(new iir_core_t(iir_coeffs_t::makePeakFilter(
-            sampleRate, params.cutoff, params.q, params.gain)));
+            sampleRate, params.frequency, params.q, params.gain)));
         break;
     }
   } else if (!(params == lastPrepareParams)) {
     switch (type) {
       case FirstOrderLowPass:
         core->coefficients =
-            iir_coeffs_t::makeFirstOrderLowPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeFirstOrderLowPass(sampleRate, params.frequency);
         break;
       case FirstOrderHighPass:
         core->coefficients =
-            iir_coeffs_t::makeFirstOrderHighPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeFirstOrderHighPass(sampleRate, params.frequency);
         break;
       case FirstOrderAllPass:
         core->coefficients =
-            iir_coeffs_t::makeFirstOrderAllPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeFirstOrderAllPass(sampleRate, params.frequency);
         break;
       case NormalLowPass:
         core->coefficients =
-            iir_coeffs_t::makeLowPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeLowPass(sampleRate, params.frequency);
         break;
       case NormalHighPass:
         core->coefficients =
-            iir_coeffs_t::makeHighPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeHighPass(sampleRate, params.frequency);
         break;
       case NormalAllPass:
         core->coefficients =
-            iir_coeffs_t::makeAllPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeAllPass(sampleRate, params.frequency);
         break;
       case NormalBandPass:
         core->coefficients =
-            iir_coeffs_t::makeBandPass(sampleRate, params.cutoff);
+            iir_coeffs_t::makeBandPass(sampleRate, params.frequency);
         break;
       case NormalNotch:
-        core->coefficients = iir_coeffs_t::makeNotch(sampleRate, params.cutoff);
+        core->coefficients =
+            iir_coeffs_t::makeNotch(sampleRate, params.frequency);
         break;
       case LowPassQ:
         core->coefficients =
-            iir_coeffs_t::makeLowPass(sampleRate, params.cutoff, params.q);
+            iir_coeffs_t::makeLowPass(sampleRate, params.frequency, params.q);
         break;
       case HighPassQ:
         core->coefficients =
-            iir_coeffs_t::makeHighPass(sampleRate, params.cutoff, params.q);
+            iir_coeffs_t::makeHighPass(sampleRate, params.frequency, params.q);
         break;
       case BandPassQ:
         core->coefficients =
-            iir_coeffs_t::makeBandPass(sampleRate, params.cutoff, params.q);
+            iir_coeffs_t::makeBandPass(sampleRate, params.frequency, params.q);
         break;
       case AllPassQ:
         core->coefficients =
-            iir_coeffs_t::makeAllPass(sampleRate, params.cutoff, params.q);
+            iir_coeffs_t::makeAllPass(sampleRate, params.frequency, params.q);
         break;
       case NotchQ:
         core->coefficients =
-            iir_coeffs_t::makeNotch(sampleRate, params.cutoff, params.q);
+            iir_coeffs_t::makeNotch(sampleRate, params.frequency, params.q);
         break;
       case LowShelf:
         core->coefficients = iir_coeffs_t::makeLowShelf(
-            sampleRate, params.cutoff, params.q, params.gain);
+            sampleRate, params.frequency, params.q, params.gain);
         break;
       case HighShelf:
         core->coefficients = iir_coeffs_t::makeHighShelf(
-            sampleRate, params.cutoff, params.q, params.gain);
+            sampleRate, params.frequency, params.q, params.gain);
         break;
       case Peak:
         core->coefficients = iir_coeffs_t::makePeakFilter(
-            sampleRate, params.cutoff, params.q, params.gain);
+            sampleRate, params.frequency, params.q, params.gain);
         break;
       default:
         break;

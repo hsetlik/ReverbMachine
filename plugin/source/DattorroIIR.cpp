@@ -79,13 +79,13 @@ void DattorroIIR::init(double sampleRate) {
     // set up high pass
     auto hpPar = *hiPass[i].getParams();
     hpPar.filterType = iir_type_t::NormalHighPass;
-    hpPar.cutoff = hiPassHz;
+    hpPar.frequency = hiPassHz;
     hiPass[i].setFreqSmoothing(true);
     hiPass[i].setParams(hpPar);
     hiPass[i].prepare(sampleRate);
     // set up low pass
     auto lpPar = *loPass[i].getParams();
-    lpPar.cutoff = loPassHz;
+    lpPar.frequency = loPassHz;
     lpPar.filterType = iir_type_t::NormalLowPass;
     loPass[i].setFreqSmoothing(true);
     loPass[i].setParams(lpPar);

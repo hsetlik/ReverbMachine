@@ -35,12 +35,12 @@ enum iir_type_t {
 
 struct single_iir_params_t {
   uint8_t filterType = iir_type_t::NormalLowPass;
-  float cutoff = 2000.0f;
+  float frequency = 2000.0f;
   float q = 0.0f;
   float gain = 1.0f;
   single_iir_params_t& operator=(const single_iir_params_t& other) {
     filterType = other.filterType;
-    cutoff = other.cutoff;
+    frequency = other.frequency;
     q = other.q;
     gain = other.gain;
     return *this;
@@ -48,13 +48,13 @@ struct single_iir_params_t {
   single_iir_params_t() = default;
   single_iir_params_t(const single_iir_params_t& other) {
     filterType = other.filterType;
-    cutoff = other.cutoff;
+    frequency = other.frequency;
     q = other.q;
     gain = other.gain;
   }
   bool operator==(single_iir_params_t& other) {
     bool tComp = filterType == other.filterType;
-    bool fComp = fequal(cutoff, other.cutoff);
+    bool fComp = fequal(frequency, other.frequency);
     bool qComp = fequal(q, other.q);
     bool gComp = fequal(gain, other.gain);
     return tComp && fComp && qComp && gComp;
